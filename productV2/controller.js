@@ -22,9 +22,9 @@ const addProduct = async (req, res) => {
 
         if (image) {
             const originaFileName = image.originalname;
-            const uploadPath = path.join(__dirname, '../public/images', originaFileName);
+            const uploadPath = path.join(__dirname, '../public/images/', originaFileName);
             fs.renameSync(image.path, uploadPath);
-            image_url = `http://localhost:3000/public/${originaFileName}`;
+            image_url = `http://localhost:3000/public/images/${originaFileName}`;
         }
 
         const product = await Product.create({ userId, name, price, stock, status, image_url });
@@ -50,7 +50,7 @@ const editProductById = async (req, res) => {
 
         if (image) {
             if (oldImageUrl) {
-                const oldImagePath = path.join(__dirname, '../public/images', path.basename(oldImageUrl));
+                const oldImagePath = path.join(__dirname, '../public/images/', path.basename(oldImageUrl));
                 fs.unlink(oldImagePath, (unlinkError) => {
                     if (unlinkError) {
                         console.error('Error delete file gambar sebelumnya:', unlinkError);
@@ -58,12 +58,12 @@ const editProductById = async (req, res) => {
                 });
             }
             const originaFileName = image.originalname;
-            const uploadPath = path.join(__dirname, '../public/images', originaFileName);
+            const uploadPath = path.join(__dirname, '../public/images/', originaFileName);
             fs.renameSync(image.path, uploadPath);
-            image_url = `http://localhost:3000/public/${originaFileName}`;
+            image_url = `http://localhost:3000/public/images/${originaFileName}`;
 
         } else if (oldImageUrl) {
-            const oldImagePath = path.join(__dirname, '../public/images', path.basename(oldImageUrl));
+            const oldImagePath = path.join(__dirname, '../public/images/', path.basename(oldImageUrl));
             fs.unlink(oldImagePath, (unlinkError) => {
                 if (unlinkError) {
                     console.error('Error delete file gambar sebelumnya:', unlinkError);
@@ -99,7 +99,7 @@ const deleteProductById = async (req, res) => {
         }
 
         if (product.image_url) {
-            const imagePath = path.join(__dirname, '../public/images', path.basename(product.image_url));
+            const imagePath = path.join(__dirname, '../public/images/', path.basename(product.image_url));
             fs.unlink(imagePath, (unlinkError) => {
                 if (unlinkError) {
                     console.error('Error menghapus file gambar:', unlinkError);

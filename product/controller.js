@@ -38,10 +38,10 @@ const addProduct = async (req, res) => {
 
     try {
         if (image) {
-            const target = path.join(__dirname, '../public/images', image.originalname);
+            const target = path.join(__dirname, '../public/images/', image.originalname);
             fs.renameSync(image.path, target);
             const collection = db.collection(dbCollection);
-            const data = await collection.insertOne({ name, price, stock, status, image_url: `http://localhost:3000/public/${image.originalname}` });
+            const data = await collection.insertOne({ name, price, stock, status, image_url: `http://localhost:3000/public/images/${image.originalname}` });
             res.status(200).json(data);
         } else {
             const collection = db.collection(dbCollection);
@@ -78,7 +78,7 @@ const editProductById = (req, res) => {
                 const target = path.join(__dirname, '../public/images', image.originalname);
                 fs.renameSync(image.path, target);
 
-                updateFields.image_url = `http://localhost:3000/public/${image.originalname}`
+                updateFields.image_url = `http://localhost:3000/public/images/${image.originalname}`
             } else {
                 updateFields.image_url = null;
                 const oldImagePath = path.join(__dirname, '../public/images', path.basename(existingProduct.image_url));
