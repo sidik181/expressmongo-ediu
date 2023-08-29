@@ -1,7 +1,5 @@
 const { ObjectId } = require('mongodb');
 const db = require('../config/mongodb');
-const fs = require('fs');
-const path = require('path');
 const dbCollection = ('products');
 
 const getProducts = async (req, res) => {
@@ -34,20 +32,12 @@ const getProductById = (req, res) => {
 
 const addProduct = async (req, res) => {
     const { name, price, stock, status } = req.body;
-    const image = req.file;
+    const image = req.file || null;
 
     try {
-        if (image) {
-            // const target = path.join(__dirname, '../public/images/', image.originalname);
-            // fs.renameSync(image.path, target);
-            const collection = db.collection(dbCollection);
-            const data = await collection.insertOne({ name, price, stock, status, image_url: `http://localhost:3000/public/images/${image.originalname}` });
-            res.status(200).json(data);
-        } else {
-            const collection = db.collection(dbCollection);
-            const data = await collection.insertOne({ name, price, stock, status, image_url: null });
-            res.status(200).json(data);
-        }
+        const collection = db.collection(dbCollection);
+        const data = await collection.insertOne({ name, price, stock, status, image_url: `http://localhost:3000/public/images/${image.originalname}` });
+        res.status(200).json(data);
     } catch (error) {
         res.status(500).json(error);
     }
@@ -56,7 +46,7 @@ const addProduct = async (req, res) => {
 const editProductById = (req, res) => {
     const { id } = req.params;
     const { name, price, stock, status } = req.body;
-    const image = req.file;
+    const image = req.file || null;
     const collection = db.collection('products');
     const objectId = new ObjectId(id);
 

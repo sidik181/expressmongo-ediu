@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+// const fs = require('fs');
+// const path = require('path');
 const Product = require('./model');
 // const s3 = require('../config/aws');
 
@@ -16,7 +16,7 @@ const getProductById = async (req, res) => {
 
 const addProduct = async (req, res) => {
     const { userId, name, price, stock, status } = req.body;
-    const image = req.file;
+    const image = req.file || null;
 
     const addProductCallback = async () => {
         let image_url = null;
@@ -40,7 +40,7 @@ const addProduct = async (req, res) => {
 const editProductById = async (req, res) => {
     const { id } = req.params;
     const { userId, name, price, stock, status } = req.body;
-    const image = req.file;
+    const image = req.file || null;
 
     const editProductCallback = async () => {
         const product = await Product.findById(id);
@@ -84,7 +84,6 @@ const editProductById = async (req, res) => {
         };
 
         const updatedProduct = await Product.findByIdAndUpdate(id, updateObject, { new: true });
-
         return updatedProduct;
     }
 
