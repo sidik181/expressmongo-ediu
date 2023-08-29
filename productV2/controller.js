@@ -1,7 +1,4 @@
-// const fs = require('fs');
-// const path = require('path');
 const Product = require('./model');
-// const s3 = require('../config/aws');
 
 const getProducts = async (req, res) => {
     const getProductsCallback = async () => Product.find();
@@ -19,17 +16,9 @@ const addProduct = async (req, res) => {
     const image = req.file || null;
 
     const addProductCallback = async () => {
-        let image_url = null;
-
         if (image) {
-            const originaFileName = image.originalname;
-            // const s3 = new AWS.S3();
-
-            // const uploadPath = path.join(__dirname, '../public/images/', originaFileName);
-            // fs.renameSync(image.path, uploadPath);
-            image_url = `http://localhost:3000/public/images/${originaFileName}`;
+            image_url = `http://localhost:3000/public/images/${image.originalname}`;
         }
-
         const product = await Product.create({ userId, name, price, stock, status, image_url });
         return product;
     };
@@ -52,26 +41,7 @@ const editProductById = async (req, res) => {
         }
 
         if (image) {
-            // if (oldImageUrl) {
-            //     const oldImagePath = path.join(__dirname, '../public/images/', path.basename(oldImageUrl));
-            //     fs.unlink(oldImagePath, (unlinkError) => {
-            //         if (unlinkError) {
-            //             console.error('Error delete file gambar sebelumnya:', unlinkError);
-            //         }
-            //     });
-            // }
-            const originaFileName = image.originalname;
-            // const uploadPath = path.join(__dirname, '../public/images/', originaFileName);
-            // fs.renameSync(image.path, uploadPath);
-            image_url = `http://localhost:3000/public/images/${originaFileName}`;
-
-        // } else if (oldImageUrl) {
-        //     const oldImagePath = path.join(__dirname, '../public/images/', path.basename(oldImageUrl));
-        //     fs.unlink(oldImagePath, (unlinkError) => {
-        //         if (unlinkError) {
-        //             console.error('Error delete file gambar sebelumnya:', unlinkError);
-        //         }
-        //     });
+            image_url = `http://localhost:3000/public/images/${image.originalname}`;
         }
 
         const updateObject = {
@@ -99,31 +69,8 @@ const deleteProductById = async (req, res) => {
         if (!product) {
             throw new Error('Produk tidak ditemukan');
         }
-
-        if (product.image_url) {
-            // const imagePath = path.join(__dirname, '../public/images/', path.basename(product.image_url));
-            // fs.unlink(imagePath, (unlinkError) => {
-            //     if (unlinkError) {
-            //         console.error('Error menghapus file gambar:', unlinkError);
-            //     }
-            //     Product.findByIdAndDelete(id)
-            //         .then(() => {
-            //             console.log('Produk berhasil dihapus');
-            //         })
-            //         .catch((deleteError) => {
-            //             console.error('Error menghapus produk:', deleteError);
-            //         });
-            // });
-        } else {
-            await Product.findByIdAndDelete(id)
-                .then(() => {
-                    console.log('Produk berhasil dihapus');
-                })
-                .catch((deleteError) => {
-                    console.error('Error menghapus produk:', deleteError);
-                });
+        await Product.findByIdAndDelete(id)
         }
-    };
 
     await tryCatch(res, deleteProductCallback);
 };

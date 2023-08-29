@@ -60,19 +60,7 @@ const editProductById = (req, res) => {
             const updateFields = { name, price, stock, status };
 
             if (image) {
-                // if (existingProduct.image_url) {
-                //     const oldImagePath = path.join(__dirname, '../public/images', path.basename(existingProduct.image_url));
-                //     fs.unlinkSync(oldImagePath);
-                // }
-
-                // const target = path.join(__dirname, '../public/images', image.originalname);
-                // fs.renameSync(image.path, target);
-
                 updateFields.image_url = `http://localhost:3000/public/images/${image.originalname}`
-            } else {
-                updateFields.image_url = null;
-                // const oldImagePath = path.join(__dirname, '../public/images', path.basename(existingProduct.image_url));
-                // fs.unlinkSync(oldImagePath);
             }
 
             collection.findOneAndUpdate(
@@ -100,10 +88,6 @@ const deleteProductById = (req, res) => {
     collection.findOneAndDelete({ _id: objectId })
         .then(deletedProduct => {
             if (deletedProduct.value) {
-                // if (deletedProduct.value.image_url) {
-                //     const oldImagePath = path.join(__dirname, '../public/images', path.basename(deletedProduct.value.image_url));
-                //     fs.unlinkSync(oldImagePath);
-                // }
                 res.status(200).json({ message: 'Produk berhasil dihapus' });
             } else {
                 res.status(404).json({ error: 'Produk tidak ditemukan.' });
